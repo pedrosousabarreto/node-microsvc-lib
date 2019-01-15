@@ -1,6 +1,6 @@
 {
   "name": "node_microsvc_lib",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "NodeJS microservice framework library",
   "main": "index.js",
   "scripts": {
