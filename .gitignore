@@ -81,4 +81,4 @@ typings/
 # osx finder stuff
 .DS_Store
 
-.idea
+.idea/

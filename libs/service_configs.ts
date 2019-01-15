@@ -10,6 +10,8 @@
 import * as uuid from "uuid";
 import {ServiceFeatureFlag, ServiceParam, ServiceParams} from "./service_params";
 
+import {IConfigsProvider} from "./interfaces";
+
 export class ServiceConfigs{
 	private _service_params: ServiceParams;
 	private _configs_provider: IConfigsProvider | null;
@@ -111,10 +113,6 @@ export class ServiceConfigs{
 
 }
 
-
-export interface IConfigsProvider{
-
-}
 
 export class AppBaseConfigs{
 	solution_name!: string;

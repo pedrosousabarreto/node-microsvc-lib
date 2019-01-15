@@ -18,3 +18,7 @@ export interface IDiFactory {
 	init(callback: (err?: Error) => void):void;
 	destroy(callback:(err?:Error)=>void):void;
 }
+
+export interface IConfigsProvider{
+	// TODO complete IConfigsProvider
+}
