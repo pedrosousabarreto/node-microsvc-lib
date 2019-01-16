@@ -97,6 +97,13 @@ declare class ServiceParams{
 	get_all_feature_flags():Array<ServiceFeatureFlag>;
 }
 
+declare enum PARAM_TYPES {
+	STRING = "STRING",
+	BOOL = "BOOL",
+	NUMBER = "NUMBER"
+}
+
+
 declare type ParamType= 'STRING' | 'BOOL' | 'NUMBER';
 
 declare class ServiceParam{
