@@ -77,6 +77,7 @@ class Microservice extends di_container_1.DiContainer {
         this._http_server.on('error', this._http_error_handler.bind(this));
         // register express_app in the DI Container
         this.register_dependency("express_app", this._express_app);
+        this.register_dependency("http_server", this._http_server);
         this._http_server.on('listening', () => {
             let addr = this._http_server.address();
             // let bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + JSON.stringify(addr);
