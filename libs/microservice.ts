@@ -98,6 +98,7 @@ export class Microservice extends DiContainer {
 
 		// register express_app in the DI Container
 		this.register_dependency("express_app", this._express_app);
+		this.register_dependency("http_server", this._http_server);
 
 		this._http_server.on('listening', () => {
 			let addr:AddressInfo = this._http_server.address() as AddressInfo;
