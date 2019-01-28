@@ -108,26 +108,12 @@ export class Microservice extends DiContainer {
 
 			// hook health check
 			this._express_app.get('/', this._health_check_handler.bind(this));
-
-			// debug
-			this._express_app.use("*", (req: express.Request, res: express.Response, next: express.NextFunction)=>{
-				//console.log(`Got request - ${req.method} - ${req.originalUrl}`);
-
-				// add a correlation id to all calls
-				const correlation_id = Uuid.v4();
-				res.locals["correlation_id"] = correlation_id;
-				res.setHeader("X-API-correlation-id", correlation_id);
-
-				next();
-			});
-
+			
 			// CORS
 			this._express_app.use(function(req, res, next) {
 				res.setHeader("Access-Control-Allow-Origin", "*");
 				res.setHeader("Access-Control-Allow-Methods", "HEAD, GET, POST, PATCH");
 				res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Requested-With");
-				res.setHeader("access-control-expose-headers", "X-API-correlation-id");
-
 				next();
 			});
 
