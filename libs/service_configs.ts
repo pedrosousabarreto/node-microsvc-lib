@@ -53,7 +53,11 @@ export class ServiceConfigs{
 		// common computed
 		this._app_full_name = this._solution_name + "__" + this._env + "__" + this._app_name;
 		this._app_full_name_version = this._app_full_name +"__" + this._app_version;
-		this._app_base_url = "/api/v" + this._app_api_version + (this._app_api_prefix ? "/" + this._app_api_prefix : "");
+
+		if(this._app_api_prefix)
+			this._app_base_url = this._app_api_prefix + "/api" + (this._app_api_version ? `/v${this._app_api_version}` : "");
+		else
+			this._app_base_url = "/";
 
 		// instance specific
 		this._instance_id = uuid.v4();
