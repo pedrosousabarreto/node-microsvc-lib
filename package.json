@@ -1,6 +1,6 @@
 {
   "name": "node-microsvc-lib",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "NodeJS microservice framework library",
   "main": "index.js",
   "types": "index.d.ts",
@@ -8,8 +8,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc"
   },
-  "author": "Pedro Barreto <pedro.barreto@bynder.com>",
-  "license": "ISC",
+  "author": "Pedro Barreto <pedrosousabarreto@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/pedrosousabarreto/node-microsvc-lib.git"
+  }
   "dependencies": {
     "async": "^2.6.1",
     "express": "^4.16.4",

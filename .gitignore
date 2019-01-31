@@ -81,5 +81,5 @@ typings/
 # osx finder stuff
 .DS_Store
 
-.idea
-.idea/workspace.xml
+#IDE metadata
+**.idea/**
