@@ -1,5 +1,5 @@
 /**
- * Created by pedro.barreto@bynder.com on 15/Jan/2019.
+ * Created by pedrosousabarreto@gmail.com on 15/Jan/2019.
  */
 "use strict";
 var __importStar = (this && this.__importStar) || function (mod) {
@@ -25,7 +25,7 @@ class Microservice extends di_container_1.DiContainer {
         super(logger);
         this._run_express = true;
         this._logger = logger.create_child({ class: "Microservice" });
-        console.time("MicroServiceStart " + configs.instance_name);
+        console.time("MicroService - Start " + configs.instance_name);
         this._configs = configs;
         this.register_dependency("configs", this._configs);
     }
@@ -35,12 +35,12 @@ class Microservice extends di_container_1.DiContainer {
         // _init_factories
         //do something when app is closing
         process.on('exit', () => {
-            this._logger.info("Microservice exiting...");
+            this._logger.info("Microservice - exiting...");
         });
         //catches ctrl+c event
         process.on('SIGINT', () => {
-            this._logger.info("Microservice SIGINT received - cleaning up...");
-            this._destroy_factories((err) => {
+            this._logger.info("Microservice - SIGINT received - cleaning up...");
+            this.destroy((err) => {
                 process.exit();
             });
         });
@@ -63,7 +63,7 @@ class Microservice extends di_container_1.DiContainer {
             ], (err) => {
                 if (err)
                     this._logger.error(err);
-                console.timeEnd("MicroServiceStart " + this._configs.instance_name);
+                console.timeEnd("MicroService - Start " + this._configs.instance_name);
                 callback(err);
             });
         });
@@ -80,8 +80,8 @@ class Microservice extends di_container_1.DiContainer {
         this._http_server.on('listening', () => {
             let addr = this._http_server.address();
             // let bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + JSON.stringify(addr);
-            this._logger.info("Microservice listening on: %s %s:%n", addr.family, addr.address, addr.port);
-            this._logger.info("Microservice PID: %d", process.pid);
+            this._logger.info("Microservice - listening on: %s %s:%n", addr.family, addr.address, addr.port);
+            this._logger.info("Microservice - PID: %d", process.pid);
             // hook health check
             this._express_app.get('/', this._health_check_handler.bind(this));
             // debug
@@ -108,7 +108,7 @@ class Microservice extends di_container_1.DiContainer {
         let mod;
         let factories = _.keys(this._factories);
         Async.forEachLimit(factories, 1, (factory_name, next) => {
-            this._logger.info("Microservice initializing factory: %s", factory_name);
+            this._logger.info("Microservice - initializing factory: %s", factory_name);
             mod = this.get(factory_name);
             mod.init.call(mod, next);
         }, (err) => {
@@ -117,18 +117,18 @@ class Microservice extends di_container_1.DiContainer {
             callback(err);
         });
     }
-    _destroy_factories(callback) {
+    destroy(callback) {
         let mod;
         let factories = _.keys(this._factories);
         Async.forEachLimit(factories, 1, (factory_name, next) => {
-            this._logger.info("Microservice destroying factory: %s", factory_name);
+            this._logger.info("Microservice - destroying factory: %s", factory_name);
             mod = this.get(factory_name);
             mod.destroy.call(mod, next);
         }, (err) => {
             if (err)
-                this._logger.error(err, "Microservice SIGINT cleanup error");
+                this._logger.error(err, "Microservice - SIGINT cleanup error");
             else
-                this._logger.info("Microservice SIGINT cleanup completed successfully, exiting...");
+                this._logger.info("Microservice - SIGINT cleanup completed successfully, exiting...");
             callback(err);
         });
     }
@@ -156,3 +156,4 @@ class Microservice extends di_container_1.DiContainer {
     }
 }
 exports.Microservice = Microservice;
+//# sourceMappingURL=microservice.js.map

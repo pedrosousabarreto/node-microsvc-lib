@@ -1,5 +1,5 @@
 /**
- * Created by pedro.barreto@bynder.com on 15/Jan/2019.
+ * Created by pedrosousabarreto@gmail.com on 15/Jan/2019.
  */
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -63,3 +63,4 @@ class ServiceFeatureFlag {
     get description() { return this._description; }
 }
 exports.ServiceFeatureFlag = ServiceFeatureFlag;
+//# sourceMappingURL=service_params.js.map

@@ -63,7 +63,7 @@ export class DiContainer {
 		if(!this.has(name))
 			return;
 
-		const err = new Error(`Di Container already has an object named ${name}`);
+		const err = new Error(`Di Container - already has an object named ${name}`);
 		this._di_logger.fatal(err);
 		throw err;
 	}

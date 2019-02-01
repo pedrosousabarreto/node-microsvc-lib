@@ -1,5 +1,5 @@
 /**
- * Created by pedro.barreto@bynder.com on 15/Jan/2019.
+ * Created by pedrosousabarreto@gmail.com on 15/Jan/2019.
  */
 "use strict";
 var __importStar = (this && this.__importStar) || function (mod) {
@@ -32,7 +32,10 @@ class ServiceConfigs {
         // common computed
         this._app_full_name = this._solution_name + "__" + this._env + "__" + this._app_name;
         this._app_full_name_version = this._app_full_name + "__" + this._app_version;
-        this._app_base_url = "/api/v" + this._app_api_version + (this._app_api_prefix ? "/" + this._app_api_prefix : "");
+        if (this._app_api_prefix)
+            this._app_base_url = this._app_api_prefix + "/api" + (this._app_api_version ? `/v${this._app_api_version}` : "");
+        else
+            this._app_base_url = "/";
         // instance specific
         this._instance_id = uuid.v4();
         this._instance_name = this._app_full_name_version + "__" + this._instance_id;
@@ -82,3 +85,4 @@ exports.ServiceConfigs = ServiceConfigs;
 class AppBaseConfigs {
 }
 exports.AppBaseConfigs = AppBaseConfigs;
+//# sourceMappingURL=service_configs.js.map

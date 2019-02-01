@@ -1,5 +1,5 @@
 /**
- * Created by pedro.barreto@bynder.com on 15/Jan/2019.
+ * Created by pedrosousabarreto@gmail.com on 15/Jan/2019.
  */
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -44,7 +44,7 @@ class DiContainer {
     _check_duplicate_name(name) {
         if (!this.has(name))
             return;
-        const err = new Error(`Di Container already has an object named ${name}`);
+        const err = new Error(`Di Container - already has an object named ${name}`);
         this._di_logger.fatal(err);
         throw err;
     }
@@ -80,3 +80,4 @@ function getArgs(func) {
         return arg;
     });
 }
+//# sourceMappingURL=di_container.js.map

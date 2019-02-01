@@ -31,29 +31,26 @@ export class Microservice extends DiContainer {
 
 		this._logger = (<any>logger).create_child({ class: "Microservice" });
 
-		console.time("MicroServiceStart " + configs.instance_name);
+		console.time("MicroService - Start " + configs.instance_name);
 
 		this._configs = configs;
 		this.register_dependency("configs", this._configs);
-
-
-
 	}
 
-	init(callback: (err?: Error) => void) {
+	public init(callback: (err?: Error) => void) {
 		// init configs
 		// _init_express_app
 		// _init_factories
 
 		//do something when app is closing
 		process.on('exit', () => {
-			this._logger.info("Microservice exiting...");
+			this._logger.info("Microservice - exiting...");
 		});
 
 		//catches ctrl+c event
 		process.on('SIGINT', ()=> {
-			this._logger.info("Microservice SIGINT received - cleaning up...");
-			this._destroy_factories((err:Error|undefined)=>{
+			this._logger.info("Microservice - SIGINT received - cleaning up...");
+			this.destroy((err:Error|undefined)=>{
 				process.exit();
 			});
 		});
@@ -80,7 +77,7 @@ export class Microservice extends DiContainer {
 				if (err)
 					this._logger.error(err);
 
-				console.timeEnd("MicroServiceStart " + this._configs.instance_name);
+				console.timeEnd("MicroService - Start " + this._configs.instance_name);
 				callback(err);
 			});
 		});
@@ -102,8 +99,8 @@ export class Microservice extends DiContainer {
 		this._http_server.on('listening', () => {
 			let addr:AddressInfo = this._http_server.address() as AddressInfo;
 			// let bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + JSON.stringify(addr);
-			this._logger.info("Microservice listening on: %s %s:%n", addr.family, addr.address, addr.port);
-			this._logger.info("Microservice PID: %d", process.pid);
+			this._logger.info("Microservice - listening on: %s %s:%n", addr.family, addr.address, addr.port);
+			this._logger.info("Microservice - PID: %d", process.pid);
 
 			// hook health check
 			this._express_app.get('/', this._health_check_handler.bind(this));
@@ -139,7 +136,7 @@ export class Microservice extends DiContainer {
 		let factories = _.keys(this._factories);
 		Async.forEachLimit(factories, 1,
 			(factory_name, next) => {
-				this._logger.info("Microservice initializing factory: %s", factory_name);
+				this._logger.info("Microservice - initializing factory: %s", factory_name);
 				mod = this.get(factory_name);
 				mod.init.call(mod, next);
 			},
@@ -151,21 +148,22 @@ export class Microservice extends DiContainer {
 		);
 	}
 
-	private _destroy_factories(callback: (err?: Error) => void) {
+
+	public destroy(callback: (err?: Error) => void) {
 		let mod:IDiFactory;
 		let factories = _.keys(this._factories);
 
 		Async.forEachLimit(factories, 1,
 			(factory_name, next) => {
-				this._logger.info("Microservice destroying factory: %s", factory_name);
+				this._logger.info("Microservice - destroying factory: %s", factory_name);
 				mod = this.get(factory_name);
 				mod.destroy.call(mod, next);
 			},
 			(err?: any) => {
 				if (err)
-					this._logger.error(err, "Microservice SIGINT cleanup error");
+					this._logger.error(err, "Microservice - SIGINT cleanup error");
 				else
-					this._logger.info("Microservice SIGINT cleanup completed successfully, exiting...");
+					this._logger.info("Microservice - SIGINT cleanup completed successfully, exiting...");
 				callback(err);
 			}
 		);
