@@ -12,7 +12,7 @@ export const PARAM_TYPES = strEnum([
 ]);
 
 /** type from string enum */
-type ParamType = keyof typeof PARAM_TYPES;
+export type ParamType = keyof typeof PARAM_TYPES;
 
 /***
  * ServiceParams

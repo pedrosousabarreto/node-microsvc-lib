@@ -3,23 +3,36 @@
  */
 "use strict";
 
-const interfaces = require("./libs/interfaces");
+import * as Interfaces from "./interfaces";
+import {ConsoleLogger as imp_ConsoleLogger} from "./console_logger";
+import {DiContainer as imp_DiContainer} from "./di_container";
+import {Microservice as imp_Microservice} from "./microservice";
 
-const service_configs = require("./libs/service_configs");
-const service_params = require("./libs/service_params");
+import * as imp_ServiceConfigs from "./service_configs";
+import * as imp_ServiceParams from "./service_params";
 
-exports.ILogger = interfaces.ILogger;
-exports.IDiFactory = interfaces.IDiFactory;
 
-exports.ConsoleLogger = require("./libs/console_logger").ConsoleLogger;
-exports.DiContainer = require("./libs/di_container").DiContainer;
-exports.Microservice = require("./libs/microservice").Microservice;
+export namespace NodeMicroSVCLib{
+	export type ILogger = Interfaces.ILogger;
+	export type IDiFactory = Interfaces.IDiFactory;
+	export type IConfigsProvider = Interfaces.IConfigsProvider;
 
-exports.ServiceConfigs = service_configs.ServiceConfigs;
-exports.AppBaseConfigs = service_configs.AppBaseConfigs;
+	export type ConsoleLogger = imp_ConsoleLogger
+	export type DiContainer = imp_DiContainer;
+	export type Microservice = imp_Microservice;
 
-exports.PARAM_TYPES = service_params.PARAM_TYPES;
-exports.ServiceParams = service_params.ServiceParams;
-exports.ServiceParam = service_params.ServiceParam;
-exports.ServiceFeatureFlag = service_params.ServiceFeatureFlag;
+	export type ServiceConfigs = imp_ServiceConfigs.ServiceConfigs;
+	export type AppBaseConfigs = imp_ServiceConfigs.AppBaseConfigs;
+
+
+	export type ServiceParams = imp_ServiceParams.ServiceParams;
+	export type ServiceParam = imp_ServiceParams.ServiceParam;
+	export type ServiceFeatureFlag = imp_ServiceParams.ServiceFeatureFlag;
+
+	export type ParamType = imp_ServiceParams.ParamType;
+	export const PARAM_TYPES = imp_ServiceParams.PARAM_TYPES;
+
+}
+
+
 
