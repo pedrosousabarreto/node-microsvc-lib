@@ -4,7 +4,7 @@
 "use strict";
 
 
-import {ServiceParams, ServiceParam, PARAM_TYPES, ServiceFeatureFlag} from "../../libs/service_params";
+import {ServiceParams, ServiceParam, PARAM_TYPES, ServiceFeatureFlag} from "../../service_params";
 
 let params = new ServiceParams();
 

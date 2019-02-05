@@ -4,7 +4,7 @@
 "use strict";
 
 
-import {ServiceConfigs, AppBaseConfigs} from "../../libs/service_configs";
+import {ServiceConfigs, AppBaseConfigs} from "../../service_configs";
 import svc_params = require("./params");
 
 let app_base_confs = new AppBaseConfigs();

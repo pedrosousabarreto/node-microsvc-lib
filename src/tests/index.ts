@@ -8,10 +8,10 @@ import "mocha";
 import {expect} from "chai"
 import * as async from "async";
 import * as uuid from "uuid";
-import {Microservice} from "../libs/microservice";
-import {ILogger} from "../libs/interfaces";
-import {ConsoleLogger} from "../libs/console_logger";
-import {ServiceConfigs} from "../libs/service_configs";
+import {Microservice} from "../microservice";
+import {ILogger} from "../interfaces";
+import {ConsoleLogger} from "../console_logger";
+import {ServiceConfigs} from "../service_configs";
 const http = require('http');
 
 import {HealthCheck} from "./factories/health_check";
