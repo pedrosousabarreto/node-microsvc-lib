@@ -15,6 +15,7 @@
   },
   "author": "Pedro Sousa Barreto <pedrosousabarreto@gmail.com>",
   "license": "MIT",
+  "keywords": ["node.js", "microservice", "framework", "light", "library", "node", "dependency injection", "dependency container"],
   "files": [
     "lib/**/*"
   ],
