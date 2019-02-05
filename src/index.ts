@@ -12,7 +12,7 @@ import * as imp_ServiceConfigs from "./service_configs";
 import * as imp_ServiceParams from "./service_params";
 
 
-export namespace NodeMicroSVCLib{
+// export namespace NodeMicroSVCLib{
 	export type ILogger = Interfaces.ILogger;
 	export type IDiFactory = Interfaces.IDiFactory;
 	export type IConfigsProvider = Interfaces.IConfigsProvider;
@@ -32,7 +32,7 @@ export namespace NodeMicroSVCLib{
 	export type ParamType = imp_ServiceParams.ParamType;
 	export const PARAM_TYPES = imp_ServiceParams.PARAM_TYPES;
 
-}
+// }
 
 
 

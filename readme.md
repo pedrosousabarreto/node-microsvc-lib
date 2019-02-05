@@ -17,3 +17,7 @@ npm run dev || npm run prod
 npm install -s express
 ## Install dev dependency (types)
 npm install  @types/express --save-dev
+
+
+## good readme
+https://itnext.io/step-by-step-building-and-publishing-an-npm-typescript-package-44fe7164964c
