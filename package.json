@@ -11,7 +11,8 @@
     "preversion": "npm test",
     "version": "git add -A src",
     "postversion": "git push && git push --tags",
-    "build": "tsc"
+    "build": "tsc",
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha lib/tests/index.js -- -R spec"
   },
   "author": "Pedro Sousa Barreto <pedrosousabarreto@gmail.com>",
   "license": "MIT",
@@ -46,6 +47,8 @@
     "@types/underscore": "^1.8.9",
     "@types/uuid": "^3.4.4",
     "chai": "^4.2.0",
+    "coveralls": "^3.0.2",
+    "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
     "ts-node-dev": "^1.0.0-pre.32",
     "typescript": "^3.2.2"
