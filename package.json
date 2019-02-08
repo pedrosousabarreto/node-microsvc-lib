@@ -12,7 +12,8 @@
     "version": "git add -A src",
     "postversion": "git push && git push --tags",
     "build": "tsc",
-    "cover": "istanbul cover node_modules/mocha/bin/_mocha lib/tests/index.js -- -R spec"
+    "cover": "nyc --cache node_modules/.bin/mocha  lib/tests/index.js --exit -- -R spec",
+    "cover_report": "nyc report --reporter=lcov"
   },
   "author": "Pedro Sousa Barreto <pedrosousabarreto@gmail.com>",
   "license": "MIT",
@@ -26,6 +27,14 @@
     "dependency injection",
     "dependency container"
   ],
+  "nyc": {
+    "check-coverage": true,
+    "per-file": false,
+    "lines": 75,
+    "statements": 75,
+    "functions": 75,
+    "branches": 75
+  },
   "files": [
     "lib/**/*"
   ],
@@ -50,6 +59,7 @@
     "coveralls": "^3.0.2",
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
+    "nyc": "^13.2.0",
     "ts-node-dev": "^1.0.0-pre.32",
     "typescript": "^3.2.2"
   }

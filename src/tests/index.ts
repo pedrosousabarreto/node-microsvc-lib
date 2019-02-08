@@ -116,5 +116,17 @@ describe('main', () => {
 	});
 
 
+	describe("console_logger", ()=>{
+		it("normal log", ()=>{
+			logger.debug("debug test");
+			logger.info("info test");
+			logger.warn("warn test");
+			logger.error(new Error("new error for error test"), "desc for error test");
+			logger.fatal("fatal test");
+		});
+
+
+	});
+
 });
 
