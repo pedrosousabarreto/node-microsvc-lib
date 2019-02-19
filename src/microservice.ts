@@ -121,7 +121,7 @@ export class Microservice extends DiContainer {
 			// CORS
 			this._express_app.use(function(req, res, next) {
 				res.setHeader("Access-Control-Allow-Origin", "*");
-				res.setHeader("Access-Control-Allow-Methods", "HEAD, GET, POST, PATCH");
+				res.setHeader("Access-Control-Allow-Methods", "HEAD, GET, POST, PATCH, DELETE");
 				res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Requested-With");
 				res.setHeader("access-control-expose-headers", "X-API-correlation-id");
 
