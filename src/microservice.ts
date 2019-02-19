@@ -110,6 +110,8 @@ export class Microservice extends DiContainer {
 			this._express_app.use("*", (req: express.Request, res: express.Response, next: express.NextFunction)=>{
 				//console.log(`Got request - ${req.method} - ${req.originalUrl}`);
 
+				// TODO check for incoming correlationid header and set it from incoming
+
 				// add a correlation id to all calls
 				const correlation_id = Uuid.v4();
 				res.locals["correlation_id"] = correlation_id;
