@@ -1,6 +1,7 @@
 /**
  * Created by pedrosousabarreto@gmail.com on 15/Jan/2019.
  */
+
 "use strict";
 
 /*
@@ -8,7 +9,7 @@
 * - needs to be fed a IConfigsProvider and a ServiceParams
 * */
 import * as uuid from "uuid";
-import {ServiceFeatureFlag, ServiceParam, ServiceParams} from "./service_params";
+import {PARAM_TYPES, ParamType, ServiceFeatureFlag, ServiceParam, ServiceParams, ServiceSecret} from "./service_params";
 
 import {IConfigsProvider} from "./interfaces";
 
@@ -17,6 +18,7 @@ export class ServiceConfigs{
 	private _configs_provider: IConfigsProvider | null;
 	private _service_params_values: Map<string,any>;
 	private _service_feature_flags_values: Map<string,boolean>;
+	private _service_secret_values: Map<string, any>;
 	private _solution_name:string;
 	private _env:string;
 	private _app_name:string;
@@ -31,8 +33,20 @@ export class ServiceConfigs{
 	private _instance_id:string;
 	private _instance_name:string;
 
-
-
+	// getters
+	get env(){ return this._env; }
+	get solution_name(){ return this._solution_name; }
+	get app_name(){ return this._app_name; }
+	get app_version(){ return this._app_version; }
+	get app_api_prefix(){ return this._app_api_prefix; }
+	get app_api_version(){ return this._app_api_version; }
+	// computed
+	get dev_mode(){ return this._dev_mode; }
+	get app_full_name(){ return this._app_full_name; }
+	get app_full_name_version(){ return this._app_full_name_version; }
+	get app_base_url(){ return this._app_base_url; }
+	get instance_id(){ return this._instance_id; }
+	get instance_name(){ return this._instance_name; }
 
 	constructor(service_params: ServiceParams, configs_provider:IConfigsProvider | null, base_configs:AppBaseConfigs){
 		this._service_params = service_params;
@@ -40,6 +54,7 @@ export class ServiceConfigs{
 
 		this._service_params_values = new Map<string, any>();
 		this._service_feature_flags_values = new Map<string, boolean>();
+		this._service_secret_values = new Map<string, any>();
 
 		this._env = base_configs.env;
 		this._solution_name = base_configs.solution_name;
@@ -64,21 +79,10 @@ export class ServiceConfigs{
 		this._instance_name = this._app_full_name_version + "__" + this._instance_id;
 
 
-		// what we can init already
-		this._service_params.get_all_params().forEach((param:ServiceParam)=>{
-			if(process.env.hasOwnProperty(param.name.toUpperCase()) && process.env[param.name.toUpperCase()])
-				this._service_params_values.set(param.name, process.env[param.name.toUpperCase()]);
-			else
-				this._service_params_values.set(param.name, param.default_value);
-		});
-
-		this._service_params.get_all_feature_flags().forEach((feature_flag:ServiceFeatureFlag)=>{
-			if(process.env.hasOwnProperty(feature_flag.name))
-				this._service_feature_flags_values.set(feature_flag.name, (process.env[feature_flag.name]==="true" || process.env[feature_flag.name]==="1") );
-			else
-				this._service_feature_flags_values.set(feature_flag.name, feature_flag.default_value);
-		});
-
+		// always load the default params and feature flags from the params
+		this._load_default_params();
+		this._load_default_feature_flags();
+		this._load_default_secrets();
 	}
 
 	// get everything it needs and prepare the object to be used
@@ -86,26 +90,24 @@ export class ServiceConfigs{
 		// create an internal structure with values of params and feature_flags
 		// so get_param_value  and get_feature_flag_value can work
 
+		if(this._configs_provider == null)
+			return callback();
+
+		const keys:string[] = Array.from(this._service_params_values.keys()).concat(
+			Array.from(this._service_feature_flags_values.keys()),
+			Array.from(this._service_secret_values.keys())
+		);
+
 		// go to consul or whatever configuration service
+		this._configs_provider.init(keys,(err?:Error) => {
+			// TODO log
 
-		return callback();
+			this._override_from_serviceprovider();
+
+			this._override_from_envvars();
+			callback(err);
+		});
 	}
-
-	// getters
-	get env(){ return this._env; }
-	get solution_name(){ return this._solution_name; }
-	get app_name(){ return this._app_name; }
-	get app_version(){ return this._app_version; }
-	get app_api_prefix(){ return this._app_api_prefix; }
-	get app_api_version(){ return this._app_api_version; }
-	// computed
-	get dev_mode(){ return this._dev_mode; }
-	get app_full_name(){ return this._app_full_name; }
-	get app_full_name_version(){ return this._app_full_name_version; }
-	get app_base_url(){ return this._app_base_url; }
-	get instance_id(){ return this._instance_id; }
-	get instance_name(){ return this._instance_name; }
-
 
 	get_param_value(name:string):any{
 		return this._service_params_values.get(name) || null;
@@ -113,6 +115,117 @@ export class ServiceConfigs{
 
 	get_feature_flag_value(name:string):boolean{
 		return this._service_feature_flags_values.get(name) || false;
+	}
+
+
+	get_secret_value(name:string):boolean{
+		return this._service_feature_flags_values.get(name) || false;
+	}
+
+	// for now use: https://hub.docker.com/_/vault as the ref implementation
+
+
+	private _load_default_params(){
+		// what we can init already
+		this._service_params.get_all_params().forEach((param: ServiceParam) => {
+				this._service_params_values.set(param.name, param.default_value);
+		});
+	}
+
+	private _load_default_feature_flags(){
+		this._service_params.get_all_feature_flags().forEach((feature_flag: ServiceFeatureFlag) => {
+			this._service_feature_flags_values.set(feature_flag.name, feature_flag.default_value);
+		});
+	}
+
+	private _load_default_secrets(){
+		this._service_params.get_all_secrets().forEach((secret: ServiceSecret) => {
+			this._service_secret_values.set(secret.name, secret.default_value);
+		});
+	}
+
+	private _override_from_envvars():void{
+		this._service_params.get_all_params().forEach((param: ServiceParam) => {
+			if (process.env.hasOwnProperty(param.name.toUpperCase()) && process.env[param.name.toUpperCase()])
+				this._service_params_values.set(param.name, this._convert_from_string(process.env[param.name.toUpperCase()] || "", param.type));
+		});
+
+		this._service_params.get_all_feature_flags().forEach((feature_flag: ServiceFeatureFlag) => {
+			if (process.env.hasOwnProperty(feature_flag.name.toUpperCase()))
+				this._service_feature_flags_values.set(feature_flag.name, this._convert_from_string(process.env[feature_flag.name.toUpperCase()] || "", PARAM_TYPES.BOOL));
+				// this._service_feature_flags_values.set(feature_flag.name,  (process.env[feature_flag.name] === "true" || process.env[feature_flag.name] === "1"));
+		});
+
+		this._service_params.get_all_secrets().forEach((secret: ServiceSecret) => {
+			if (process.env.hasOwnProperty(secret.name.toUpperCase()) && process.env[secret.name.toUpperCase()])
+				this._service_secret_values.set(secret.name, process.env[secret.name.toUpperCase()]);
+		});
+	}
+
+
+	private _override_from_serviceprovider():void{
+
+		this._service_params.get_all_params().forEach((param: ServiceParam) => {
+			// @ts-ignore
+			const val_str = this._configs_provider.get_value(param.name);
+
+			if(val_str)
+				this._service_params_values.set(param.name, this._convert_from_string(val_str, param.type));
+		});
+
+		this._service_params.get_all_feature_flags().forEach((feature_flag: ServiceFeatureFlag) => {
+			// @ts-ignore
+			const val_str = this._configs_provider.get_value(feature_flag.name);
+
+			if(val_str)
+				this._service_feature_flags_values.set(feature_flag.name, this._convert_from_string(val_str, PARAM_TYPES.BOOL));
+		});
+
+		this._service_params.get_all_secrets().forEach((secret: ServiceSecret) => {
+			// @ts-ignore
+			const val_str = this._configs_provider.get_value(secret.name);
+
+			if(val_str)
+				this._service_params_values.set(secret.name, this._convert_from_string(val_str, PARAM_TYPES.STRING));
+		});
+	}
+
+	private _convert_from_string(value:string, destination_type:ParamType):any{
+		switch(destination_type){
+			case PARAM_TYPES.STRING:
+				return value;
+				break;
+			case PARAM_TYPES.INT_NUMBER:
+				try{
+					const num = Number.parseInt(value);
+					return num;
+				}catch(e){
+					return null;
+				}
+				return value;
+				break;
+			case PARAM_TYPES.FLOAT_NUMBER:
+				try{
+					const num = Number.parseFloat(value)
+					return num;
+				}catch(e){
+					return null;
+				}
+				return value;
+				break;
+			case PARAM_TYPES.BOOL:
+				try{
+					const bool_value = value.toLowerCase() == "true" || value =="1" ? true : false
+					return bool_value;
+				}catch(e){
+					return null;
+				}
+				return value;
+				break;
+			default:
+				return value;
+				break;
+		}
 	}
 
 }

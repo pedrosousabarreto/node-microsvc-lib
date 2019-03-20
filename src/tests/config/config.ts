@@ -1,11 +1,13 @@
 /**
  * Created by pedrosousabarreto@gmail.com on 15/Jan/2019.
  */
+
 "use strict";
 
 
 import {ServiceConfigs, AppBaseConfigs} from "../../service_configs";
 import svc_params = require("./params");
+import {HashicorpVaultProvider} from "../../service_provider_implementations/hashicorp_vault";
 
 let app_base_confs = new AppBaseConfigs();
 app_base_confs.env = process.env.NODE_ENV || 'dev_local';
@@ -31,5 +33,7 @@ if(process.env.hasOwnProperty("LOCAL_OVERRIDES")){
 	}
 }
 
+const vault_provider = new HashicorpVaultProvider(app_base_confs.solution_name, app_base_confs.app_name, "http://localhost:8200", "myroot");
+
 // exports a ServiceConfigs instance
-export = new ServiceConfigs(svc_params, null, app_base_confs);
+export = new ServiceConfigs(svc_params, vault_provider, app_base_confs);

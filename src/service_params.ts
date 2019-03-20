@@ -8,7 +8,8 @@ import {strEnum} from "./string_utils";
 export const PARAM_TYPES = strEnum([
 	'STRING',
 	'BOOL',
-	'NUMBER'
+	'INT_NUMBER',
+	'FLOAT_NUMBER'
 ]);
 
 /** type from string enum */
@@ -23,10 +24,12 @@ export type ParamType = keyof typeof PARAM_TYPES;
 export class ServiceParams{
 	private _params:Map<string, ServiceParam>;
 	private _feature_flags:Map<string, ServiceFeatureFlag>;
+	private _secrets:Map<string, ServiceSecret>;
 
 	constructor(){
 		this._params = new Map<string, ServiceParam>();
 		this._feature_flags = new Map<string, ServiceFeatureFlag>();
+		this._secrets = new Map<string, ServiceSecret>();
 	}
 
 	add_param(srv_opt:ServiceParam){
@@ -53,6 +56,18 @@ export class ServiceParams{
 		return Array.from(this._feature_flags.values());
 	}
 
+	get_all_secrets():Array<ServiceSecret>{
+		return Array.from(this._secrets.values());
+	}
+
+	add_secret(secret:ServiceSecret){
+		this._secrets.set(secret.name, secret);
+	}
+
+	get_secret(secret_name:string):ServiceSecret | null{
+		return this._secrets.get(secret_name) || null;
+	}
+
 }
 
 export class ServiceParam{
@@ -69,5 +84,13 @@ export class ServiceFeatureFlag{
 
 	get name():string{ return this._name; }
 	get default_value():boolean{ return this._default_value; }
+	get description():string{ return this._description; }
+}
+
+export class ServiceSecret{
+	constructor(private _name:string, private _default_value:string | null, private _description:string){}
+
+	get name():string{ return this._name; }
+	get default_value():string|null{ return this._default_value; }
 	get description():string{ return this._description; }
 }

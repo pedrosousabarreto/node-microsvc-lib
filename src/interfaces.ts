@@ -20,5 +20,7 @@ export interface IDiFactory {
 }
 
 export interface IConfigsProvider{
-	// TODO complete IConfigsProvider
+	readonly solution_name:string;
+	init(keys:string[], callback:(err?:Error)=>void):void;
+	get_value(key_name:string):string|null;
 }

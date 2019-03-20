@@ -12,7 +12,7 @@
     "version": "git add -A src",
     "postversion": "git push && git push --tags",
     "build": "tsc",
-    "cover": "nyc --cache node_modules/.bin/mocha  lib/tests/index.js --exit -- -R spec",
+    "cover": "nyc --all --cache node_modules/.bin/mocha  lib/tests/index.js --exit -- -R spec",
     "cover_report": "nyc report --reporter=lcov"
   },
   "author": "Pedro Sousa Barreto <pedrosousabarreto@gmail.com>",
@@ -45,6 +45,7 @@
   "dependencies": {
     "async": "^2.6.1",
     "express": "^4.16.4",
+    "request": "^2.88.0",
     "underscore": "^1.9.1",
     "uuid": "^3.3.2"
   },
@@ -53,13 +54,14 @@
     "@types/chai": "^4.1.7",
     "@types/express": "^4.16.0",
     "@types/mocha": "^5.2.5",
+    "@types/request": "^2.48.1",
     "@types/underscore": "^1.8.9",
     "@types/uuid": "^3.4.4",
     "chai": "^4.2.0",
     "coveralls": "^3.0.2",
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
-    "nyc": "^13.2.0",
+    "nyc": "^13.3.0",
     "ts-node-dev": "^1.0.0-pre.32",
     "typescript": "^3.2.2"
   }
