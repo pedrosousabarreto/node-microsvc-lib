@@ -4,6 +4,7 @@
 "use strict";
 
 import {strEnum} from "./string_utils";
+import {AppBaseConfigs} from "./service_configs";
 
 export const PARAM_TYPES = strEnum([
 	'STRING',
@@ -66,6 +67,18 @@ export class ServiceParams{
 
 	get_secret(secret_name:string):ServiceSecret | null{
 		return this._secrets.get(secret_name) || null;
+	}
+
+	// this will update the passed
+	public override_from_env_file(app_base_confs:AppBaseConfigs){
+		if(process.env.hasOwnProperty("LOCAL_OVERRIDES")){
+			try{
+				let filename = "./params." + app_base_confs.env;
+				require(filename)(app_base_confs, this);
+			} catch(e){
+				console.log("error on LOCAL_OVERRIDES");
+			}
+		}
 	}
 
 }
