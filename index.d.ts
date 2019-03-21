@@ -1,5 +1,3 @@
-import {strEnum} from "./libs/string_utils";
-
 export as namespace NodeMicroSvcLib;
 
 export interface Dictionary<T> { [key: string]: T; }
@@ -23,7 +21,9 @@ export interface IDiFactory {
 }
 
 export interface IConfigsProvider{
-	// TODO complete IConfigsProvider
+	readonly solution_name:string;
+	init(keys:string[], callback:(err?:Error)=>void):void;
+	get_value(key_name:string):string|null;
 }
 
 
@@ -121,4 +121,12 @@ declare class ServiceFeatureFlag{
 	readonly name:string;
 	readonly default_value:boolean;
 	readonly description:string;
+}
+
+declare class HashicorpVaultProvider implements IConfigsProvider{
+	public readonly solution_name:string;
+
+	constructor(solution_name:string, service_name:string, vault_base_url:string, vault_token:string);
+	init(keys:string[], callback:(err?:Error)=>void):void;
+	get_value(key_name:string):string|null;
 }

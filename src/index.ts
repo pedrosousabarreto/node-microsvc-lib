@@ -2,7 +2,7 @@
  * Created by pedrosousabarreto@gmail.com on 15/Jan/2019.
  */
 "use strict";
-
+import {HashicorpVaultProvider as imp_HashicorpVaultProvider} from "./config_providers/hashicorp_vault";
 import * as Interfaces from "./interfaces";
 import {ConsoleLogger as imp_ConsoleLogger} from "./console_logger";
 import {DiContainer as imp_DiContainer} from "./di_container";
@@ -43,6 +43,7 @@ import * as imp_ServiceParams from "./service_params";
 
 	export const PARAM_TYPES = imp_ServiceParams.PARAM_TYPES;
 
+	export const HashicorpVaultProvider = imp_HashicorpVaultProvider;
 // }
 
 
