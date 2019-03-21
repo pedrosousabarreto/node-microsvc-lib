@@ -61,16 +61,16 @@ Three sets of configuration values exist:
 - Feature Flags - always of boolean type;
 - Secrets - always of string type.
 
-####ServiceConfigs *(Required)*
+### ServiceConfigs *(Required)*
 This is the object that the *Microservice* requires to source all its runtime configs.
 
-####ServiceParams *(Required)*
+### ServiceParams *(Required)*
 The definition of params, feature flags and secrets required by the service and their default values.
 
-####IConfigsProvider *(Optional)*
+### IConfigsProvider *(Optional)*
 Optional instance that fetches all config values from an external service such as consul or hashicorp vault. 
 
-###Load order / precedence
+### Load order / precedence
 The order of loading:
 1. **params.js file** - ServiceParams instance gets loaded along with the default values;
 2. **params.ENV_NAME.js file** - the one that overrides values in ServiceParams per env - **if LOCAL_OVERRIDES env var is set**;
