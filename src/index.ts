@@ -48,8 +48,7 @@ import * as imp_ObjectUtils from "./objects_utils";
 
 	export const HashicorpVaultProvider = imp_HashicorpVaultProvider;
 
-	export const toCamelCase = imp_ObjectUtils.toCamelCase;
-	export const toSnakeCase = imp_ObjectUtils.toSnakeCase;
+	export const ObjectUtils = imp_ObjectUtils;
 // }
 
 
