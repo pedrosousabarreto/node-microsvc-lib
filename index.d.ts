@@ -95,6 +95,8 @@ declare class ServiceParams{
 	add_feature_flag(feature_flag:ServiceFeatureFlag):void;
 	get_feature_flag(feature_flag_name:string):ServiceFeatureFlag | null;
 	get_all_feature_flags():Array<ServiceFeatureFlag>;
+
+	override_from_env_file(app_base_confs:AppBaseConfigs):void;
 }
 
 declare enum PARAM_TYPES {
@@ -122,6 +124,16 @@ declare class ServiceFeatureFlag{
 	readonly default_value:boolean;
 	readonly description:string;
 }
+
+declare class ServiceSecret{
+	constructor(name:string, default_value:string | null, description:string);
+
+	readonly name:string;
+	readonly default_value:string|null;
+	readonly description:string;
+}
+
+
 
 declare class HashicorpVaultProvider implements IConfigsProvider{
 	public readonly solution_name:string;

@@ -70,7 +70,7 @@ export class ServiceParams{
 	}
 
 	// this will update the passed
-	public override_from_env_file(app_base_confs:AppBaseConfigs){
+	public override_from_env_file(app_base_confs:AppBaseConfigs):void{
 		if(process.env.hasOwnProperty("LOCAL_OVERRIDES")){
 			try{
 				let filename = "./params." + app_base_confs.env;
