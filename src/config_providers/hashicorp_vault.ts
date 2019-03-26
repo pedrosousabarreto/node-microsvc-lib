@@ -48,7 +48,7 @@ export class HashicorpVaultProvider implements IConfigsProvider{
 		request.get(this._vault_final_url, {json:true, auth: { bearer: this._vault_token } }, (error: any, response: Response, body: any)=>{
 			//console.log(body);
 
-			if(response.statusCode == 200){
+			if(response && response.statusCode == 200){
 				keys.forEach((key_name:string)=>{
 					const val = this._get_value_from_resp_body(key_name, body);
 					if(val)
