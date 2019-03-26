@@ -38,6 +38,8 @@ import * as imp_ServiceParams from "./service_params";
 	export const ServiceParam = imp_ServiceParams.ServiceParam;
 	export type ServiceFeatureFlag = imp_ServiceParams.ServiceFeatureFlag;
 	export const ServiceFeatureFlag = imp_ServiceParams.ServiceFeatureFlag;
+	export type ServiceSecret = imp_ServiceParams.ServiceSecret;
+	export const ServiceSecret = imp_ServiceParams.ServiceSecret;
 
 	export type ParamType = imp_ServiceParams.ParamType;
 
