@@ -32,5 +32,5 @@ const convertCase = (oldObject: any, converterFunction: any): any => {
   return newObject;
 };
 
-export const toCamelCase = (obj: any) => convertCase(obj, _.camelCase);
-export const toSnakeCase = (obj: any) => convertCase(obj, _.snakeCase);
+export const ToCamelCase = (obj: any) => convertCase(obj, _.camelCase);
+export const ToSnakeCase = (obj: any) => convertCase(obj, _.snakeCase);
