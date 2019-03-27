@@ -10,6 +10,7 @@ import {Microservice as imp_Microservice} from "./microservice";
 
 import * as imp_ServiceConfigs from "./service_configs";
 import * as imp_ServiceParams from "./service_params";
+import * as imp_ObjectUtils from "./objects_utils";
 
 
 // export namespace NodeMicroSVCLib{
@@ -46,6 +47,8 @@ import * as imp_ServiceParams from "./service_params";
 	export const PARAM_TYPES = imp_ServiceParams.PARAM_TYPES;
 
 	export const HashicorpVaultProvider = imp_HashicorpVaultProvider;
+
+	export const ObjectUtils = imp_ObjectUtils;
 // }
 
 
