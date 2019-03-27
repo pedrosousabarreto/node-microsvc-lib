@@ -3,19 +3,17 @@
  */
 
 
+
 "use strict";
 import "mocha";
 import {expect} from "chai"
 import * as async from "async";
 import * as uuid from "uuid";
-import {Microservice} from "../microservice";
-import {ILogger} from "../interfaces";
-import {ConsoleLogger} from "../console_logger";
-import {ServiceConfigs} from "../service_configs";
 const http = require('http');
-
-import {HealthCheck} from "./factories/health_check";
 import {ServerResponse} from "http";
+
+import {ObjectUtils, ServiceConfigs, ConsoleLogger, ILogger,Microservice} from "../index";
+import {HealthCheck} from "./factories/health_check";
 
 
 describe('main', () => {
@@ -125,6 +123,26 @@ describe('main', () => {
 			logger.fatal("fatal test");
 		});
 
+
+	});
+
+
+	describe("object_utils", ()=>{
+		it("ToCamelCase log", ()=>{
+			const src = {my_key:"my_value"};
+			const dst = ObjectUtils.ToCamelCase(src);
+
+			expect(dst).to.haveOwnProperty("myKey");
+			expect(dst).to.not.haveOwnProperty("my_key");
+		});
+
+		it("ToSnakeCase log", ()=>{
+			const src = {myKey:"my_value"};
+			const dst = ObjectUtils.ToSnakeCase(src);
+
+			expect(dst).to.haveOwnProperty("my_key");
+			expect(dst).to.not.haveOwnProperty("myKey");
+		});
 
 	});
 
