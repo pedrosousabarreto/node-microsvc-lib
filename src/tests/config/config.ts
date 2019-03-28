@@ -31,12 +31,16 @@ svc_params.override_from_env_file(app_base_confs);
 * AWS_SESSION_TOKEN
 *
 * */
+//
 // const aws_secrets_manager_provider = new AWSSecretsManagerProvider(
 // 	app_base_confs.solution_name,
-// 	"development/bynder-localisation/settings",
-// 	"arn:aws:iam::745091492598:role/Developer",
-// 	"nodeSession",
-// 	"eu-central-1"
+// 	"development/app/key_name",
+// 	"eu-central-1",
+// 	{
+// 		accessKeyId: process.env["AWS_ACCESS_KEY_ID"] || "",
+// 		secretAccessKey: process.env["AWS_SECRET_ACCESS_KEY"] || "",
+// 		sessionToken: process.env["AWS_SESSION_TOKEN"] || ""
+// 	}
 // );
 
 
@@ -44,6 +48,7 @@ svc_params.override_from_env_file(app_base_confs);
 // const vault_url = "http://localhost:8200";
 // const vault_token = "myroot";
 // const vault_provider = new HashicorpVaultProvider(app_base_confs.solution_name, app_base_confs.app_name, vault_url, vault_token);
+
 
 // exports a ServiceConfigs instance
 export = new ServiceConfigs(svc_params, null, app_base_confs);
