@@ -3,6 +3,7 @@
  */
 "use strict";
 import {HashicorpVaultProvider as imp_HashicorpVaultProvider} from "./config_providers/hashicorp_vault";
+import {AWSSecretsManagerProvider as imp_AWSSecretsManagerProvider} from "./config_providers/aws_secrets_manager";
 import * as Interfaces from "./interfaces";
 import {ConsoleLogger as imp_ConsoleLogger} from "./console_logger";
 import {DiContainer as imp_DiContainer} from "./di_container";
@@ -47,6 +48,7 @@ import * as imp_ObjectUtils from "./objects_utils";
 	export const PARAM_TYPES = imp_ServiceParams.PARAM_TYPES;
 
 	export const HashicorpVaultProvider = imp_HashicorpVaultProvider;
+	export const AWSSecretsManagerProvider = imp_AWSSecretsManagerProvider;
 
 	export const ObjectUtils = imp_ObjectUtils;
 // }

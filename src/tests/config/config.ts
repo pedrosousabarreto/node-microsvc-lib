@@ -1,10 +1,12 @@
 /**
  * Created by pedrosousabarreto@gmail.com on 15/Jan/2019.
  */
+
 "use strict";
 
 import {ServiceConfigs, AppBaseConfigs} from "../../service_configs";
 import {HashicorpVaultProvider} from "../../config_providers/hashicorp_vault";
+import {AWSSecretsManagerProvider} from "../../config_providers/aws_secrets_manager";
 
 let app_base_confs = new AppBaseConfigs();
 app_base_confs.env = process.env.NODE_ENV || 'dev_local';
@@ -20,10 +22,20 @@ import svc_params = require("./params");
 // check if overrides is enabled and an override file exists and if so, apply it
 svc_params.override_from_env_file(app_base_confs);
 
+const aws_secrets_manager_provider = new AWSSecretsManagerProvider(
+	app_base_confs.solution_name,
+	"development/bynder-localisation/settings",
+	"arn:aws:iam::745091492598:role/Developer",
+	"nodeSession",
+	"eu-central-1"
+);
+
+
 //
-const vault_url = "http://localhost:8200";
-const vault_token = "myroot";
-const vault_provider = new HashicorpVaultProvider(app_base_confs.solution_name, app_base_confs.app_name, vault_url, vault_token);
+// const vault_url = "http://localhost:8200";
+// const vault_token = "myroot";
+// const vault_provider = new HashicorpVaultProvider(app_base_confs.solution_name, app_base_confs.app_name, vault_url, vault_token);
 
 // exports a ServiceConfigs instance
-export = new ServiceConfigs(svc_params, vault_provider, app_base_confs);
+export = new ServiceConfigs(svc_params, aws_secrets_manager_provider, app_base_confs);
+// export = new ServiceConfigs(svc_params, vault_provider, app_base_confs);
