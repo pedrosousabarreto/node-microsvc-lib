@@ -118,6 +118,8 @@ export class ServiceConfigs {
 		this._load_default_params();
 		this._load_default_feature_flags();
 		this._load_default_secrets();
+
+		this._override_from_envvars();
 	}
 
 	// get everything it needs and prepare the object to be used
@@ -139,7 +141,6 @@ export class ServiceConfigs {
 
 			this._override_from_serviceprovider();
 
-			this._override_from_envvars();
 			callback(err);
 		});
 	}
