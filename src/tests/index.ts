@@ -16,6 +16,8 @@ import {ObjectUtils, ServiceConfigs, ConsoleLogger, ILogger,Microservice} from "
 import {HealthCheck} from "./factories/health_check";
 
 
+process.env["TEST_PARAM"]= "env_var_value";
+
 describe('main', () => {
 	let app:Microservice;
 	let logger:ILogger;
@@ -143,6 +145,16 @@ describe('main', () => {
 			expect(dst).to.haveOwnProperty("my_key");
 			expect(dst).to.not.haveOwnProperty("myKey");
 		});
+
+	});
+
+	describe("configs", ()=>{
+		it("override from env_vars", ()=>{
+			const param_val = configs.get_param_value("test_param");
+			expect(param_val).be.equal("env_var_value");
+
+		});
+
 
 	});
 

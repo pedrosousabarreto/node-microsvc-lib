@@ -9,6 +9,10 @@ import {ServiceParams, ServiceParam, PARAM_TYPES, ServiceFeatureFlag, ServiceSec
 
 let params = new ServiceParams();
 
+params.add_param(new ServiceParam("test_param",
+	PARAM_TYPES.STRING, "default_val",
+	"test param to be overridden by env_var"));
+
 
 params.add_param(new ServiceParam("http_port",
 	PARAM_TYPES.INT_NUMBER, 3000,
