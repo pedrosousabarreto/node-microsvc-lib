@@ -125,8 +125,10 @@ export class ServiceConfigs {
 		// create an internal structure with values of params and feature_flags
 		// so get_param_value  and get_feature_flag_value can work
 
-		if (this._configs_provider == null)
+		if (this._configs_provider == null){
+			this._override_from_envvars();
 			return callback();
+		}
 
 		const keys: string[] = Array.from(this._service_params_values.keys()).concat(
 			Array.from(this._service_feature_flags_values.keys()),
