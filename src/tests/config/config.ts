@@ -22,13 +22,22 @@ import svc_params = require("./params");
 // check if overrides is enabled and an override file exists and if so, apply it
 svc_params.override_from_env_file(app_base_confs);
 
-const aws_secrets_manager_provider = new AWSSecretsManagerProvider(
-	app_base_confs.solution_name,
-	"development/bynder-localisation/settings",
-	"arn:aws:iam::745091492598:role/Developer",
-	"nodeSession",
-	"eu-central-1"
-);
+
+/*
+* inject these env vars:
+*
+* AWS_ACCESS_KEY_ID
+* AWS_SECRET_ACCESS_KEY
+* AWS_SESSION_TOKEN
+*
+* */
+// const aws_secrets_manager_provider = new AWSSecretsManagerProvider(
+// 	app_base_confs.solution_name,
+// 	"development/bynder-localisation/settings",
+// 	"arn:aws:iam::745091492598:role/Developer",
+// 	"nodeSession",
+// 	"eu-central-1"
+// );
 
 
 //
@@ -37,5 +46,6 @@ const aws_secrets_manager_provider = new AWSSecretsManagerProvider(
 // const vault_provider = new HashicorpVaultProvider(app_base_confs.solution_name, app_base_confs.app_name, vault_url, vault_token);
 
 // exports a ServiceConfigs instance
-export = new ServiceConfigs(svc_params, aws_secrets_manager_provider, app_base_confs);
+export = new ServiceConfigs(svc_params, null, app_base_confs);
+// export = new ServiceConfigs(svc_params, aws_secrets_manager_provider, app_base_confs);
 // export = new ServiceConfigs(svc_params, vault_provider, app_base_confs);
