@@ -73,11 +73,63 @@ Optional instance that fetches all config values from an external service such a
 ### Load order / precedence
 The order of loading:
 1. **params.js file** - ServiceParams instance gets loaded along with the default values;
-2. **params.ENV_NAME.js file** - the one that overrides values in ServiceParams per env - **if LOCAL_OVERRIDES env var is set**;
+2. **params.ENV_NAME.js file** - the one that overrides values in ServiceParams per env;
 3. **IConfigsProvider** - if a correspondent key name exists the value from the provider overrides the current one;
 4. **Environment vars** - all parameters can be overridden by passing an uppercase env var with the param key name 
 
 In summary, env vars always win (if defined).
+
+### Example
+See [the ref implementaion](https://github.com/pedrosousabarreto/node-microsvc-lib/tree/master/src/tests/config]) for an example
+
+*config.ts*
+```javascript
+"use strict";
+
+import {ServiceConfigs, AppBaseConfigs} from "node-microsvc-lib";
+
+let app_base_confs = new AppBaseConfigs();
+app_base_confs.env = process.env.NODE_ENV || 'dev_local';
+app_base_confs.solution_name = "my_solution";
+app_base_confs.app_name = "my_app";
+app_base_confs.app_version = "0.0.1";
+app_base_confs.app_api_prefix = "";
+app_base_confs.app_api_version = "1";
+
+export = new ServiceConfigs(__dirname, app_base_confs, null);
+```
+*params.ts*
+```javascript
+"use strict";
+
+import {ServiceParams, ServiceParam, PARAM_TYPES, ServiceFeatureFlag, ServiceSecret} from "node-microsvc-lib";
+let params = new ServiceParams();
+
+params.add_param(new ServiceParam("test_param",
+	PARAM_TYPES.STRING, "default_val",
+	"test param to be overridden by env_var"));
+ 
+params.add_feature_flag(new ServiceFeatureFlag("RUN_EXPRESS_APP",
+	true, "start the express application"));
+
+params.add_secret(new ServiceSecret("secret1", null, "db password example"));
+
+export = params;
+```
+
+*params.NODE_ENV.ts (optional file see step 2 above)*
+```javascript
+"use strict";
+
+import {ServiceParams, ServiceParam, PARAM_TYPES, AppBaseConfigs} from "node-microsvc-lib";
+
+module.exports = function(app_base_confs:AppBaseConfigs, service_params:ServiceParams){
+	// do whatever overrides with it
+
+	service_params.add_param(new ServiceParam("test_param", PARAM_TYPES.STRING,
+		"per_env_value", "kafka broker connection string - ex: 127.0.0.1:9092"));
+};
+```
 
 ## Pre-requisites for contributing
 NVM - Node Version Manager - https://github.com/creationix/nvm
