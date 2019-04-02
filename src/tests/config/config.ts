@@ -16,11 +16,11 @@ app_base_confs.app_version = "0.0.1";
 app_base_confs.app_api_prefix = "";
 app_base_confs.app_api_version = "1";
 
-
-// First load the required params with their default values
-import svc_params = require("./params");
-// check if overrides is enabled and an override file exists and if so, apply it
-svc_params.override_from_env_file(app_base_confs);
+//
+// // First load the required params with their default values
+// import svc_params = require("./params");
+// // check if overrides is enabled and an override file exists and if so, apply it
+// svc_params.override_from_env_file(app_base_confs);
 
 
 /*
@@ -51,6 +51,6 @@ svc_params.override_from_env_file(app_base_confs);
 
 
 // exports a ServiceConfigs instance
-export = new ServiceConfigs(svc_params, null, app_base_confs);
+export = new ServiceConfigs(__dirname, app_base_confs, null);
 // export = new ServiceConfigs(svc_params, aws_secrets_manager_provider, app_base_confs);
 // export = new ServiceConfigs(svc_params, vault_provider, app_base_confs);

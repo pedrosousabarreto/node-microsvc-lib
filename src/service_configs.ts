@@ -10,11 +10,12 @@
 * */
 import * as uuid from "uuid";
 import {PARAM_TYPES, ParamType, ServiceFeatureFlag, ServiceParam, ServiceParams, ServiceSecret} from "./service_params";
-
 import {IConfigsProvider} from "./interfaces";
+import * as path from "path";
 
 export class ServiceConfigs {
-	private _service_params: ServiceParams;
+	private _conf_files_dir_path!:string;
+	private _service_params!: ServiceParams;
 	private _configs_provider: IConfigsProvider | null;
 	private _service_params_values: Map<string, any>;
 	private _service_feature_flags_values: Map<string, boolean>;
@@ -83,8 +84,9 @@ export class ServiceConfigs {
 		return this._instance_name;
 	}
 
-	constructor(service_params: ServiceParams, configs_provider: IConfigsProvider | null, base_configs: AppBaseConfigs) {
-		this._service_params = service_params;
+	constructor(base_config_path:string, base_configs: AppBaseConfigs, configs_provider: IConfigsProvider | null) {
+		this._conf_files_dir_path = base_config_path;
+
 		this._configs_provider = configs_provider;
 
 		this._service_params_values = new Map<string, any>();
@@ -113,6 +115,11 @@ export class ServiceConfigs {
 		this._instance_id = uuid.v4();
 		this._instance_name = this._app_full_name_version + "__" + this._instance_id;
 
+		// load the param.js file
+		this._try_load_params_file();
+
+		// check if overrides is enabled and an override file exists and if so, apply it
+		this._service_params.override_from_env_file(this._conf_files_dir_path, base_configs);
 
 		// always load the default params and feature flags from the params
 		this._load_default_params();
@@ -161,6 +168,20 @@ export class ServiceConfigs {
 
 	// for now use: https://hub.docker.com/_/vault as the ref implementation
 
+
+	private _try_load_params_file(){
+		// const caller_file = GetCallerFile();
+		// const caller_path = path.dirname(caller_file);
+		const filename = path.resolve(this._conf_files_dir_path, "params");
+
+		try{
+			const params_obj = require(filename);
+			this._service_params = params_obj;
+		}catch(e){
+			throw new Error(`params.js file not found - one is required in path ${this._conf_files_dir_path}`);
+		}
+
+	}
 
 	private _load_default_params() {
 		// what we can init already

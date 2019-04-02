@@ -3,6 +3,7 @@
  */
 "use strict";
 
+import * as path from "path";
 import {strEnum} from "./string_utils";
 import {AppBaseConfigs} from "./service_configs";
 
@@ -70,15 +71,16 @@ export class ServiceParams{
 	}
 
 	// this will update the passed
-	public override_from_env_file(app_base_confs:AppBaseConfigs):void{
-		if(process.env.hasOwnProperty("LOCAL_OVERRIDES")){
+	public override_from_env_file(base_config_path:string, app_base_confs:AppBaseConfigs):void{
+		const filename = path.resolve(base_config_path, "params." + app_base_confs.env);
+		// if(process.env.hasOwnProperty("LOCAL_OVERRIDES")){
 			try{
-				let filename = "./params." + app_base_confs.env;
 				require(filename)(app_base_confs, this);
+				console.info(`ENV VAR name based param file LOADED from path: ${filename}`);
 			} catch(e){
-				console.log("error on LOCAL_OVERRIDES");
+				console.info(`ENV VAR name based param file NOT FOUND in path: ${filename}`);
 			}
-		}
+		// }
 	}
 
 }
@@ -107,3 +109,5 @@ export class ServiceSecret{
 	get default_value():string|null{ return this._default_value; }
 	get description():string{ return this._description; }
 }
+
+
