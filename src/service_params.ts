@@ -72,7 +72,7 @@ export class ServiceParams{
 
 	// this will update the passed
 	public override_from_env_file(base_config_path:string, app_base_confs:AppBaseConfigs):void{
-		const filename = path.resolve(base_config_path, "params." + app_base_confs.env);
+		const filename = path.resolve(base_config_path, "params." + app_base_confs.env + ".js");
 		// if(process.env.hasOwnProperty("LOCAL_OVERRIDES")){
 			try{
 				require(filename)(app_base_confs, this);
