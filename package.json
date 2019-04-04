@@ -50,7 +50,9 @@
     "lodash": "^4.17.11",
     "request": "^2.88.0",
     "underscore": "^1.9.1",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "winston": "3.2.1",
+    "winston-transport": "4.3.0"
   },
   "devDependencies": {
     "@types/async": "^2.0.50",
