@@ -11,8 +11,7 @@ export class FluentLogger implements ILogger {
     private _attrs: object = {};
 
     debug(message?: any, ...optionalParams: any[]): void {
-
-        console.log.apply(this, [message, ...optionalParams]);
+        fluentLogger.emit('debug', { message, ...optionalParams });
     }
 
     info(message?: any, ...optionalParams: any[]): void {
