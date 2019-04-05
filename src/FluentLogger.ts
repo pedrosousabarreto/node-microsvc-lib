@@ -11,22 +11,27 @@ export class FluentLogger implements ILogger {
     private _attrs: object = {};
 
     debug(message?: any, ...optionalParams: any[]): void {
+        console.log.apply(this, [message, ...optionalParams]);
         fluentLogger.emit('debug', { message, ...optionalParams });
     }
 
     info(message?: any, ...optionalParams: any[]): void {
+        console.info.apply(this, [message, ...optionalParams]);
         fluentLogger.emit('info', { message, ...optionalParams });
     }
 
     warn(message?: any, ...optionalParams: any[]): void {
+        console.warn.apply(this, [message, ...optionalParams]);
         fluentLogger.emit('warn', { message, ...optionalParams });
     }
 
     error(message?: any, ...optionalParams: any[]): void {
+        console.error.apply(this, [message, ...optionalParams]);
         fluentLogger.emit('error', { message, ...optionalParams });
     }
 
     fatal(message?: any, ...optionalParams: any[]): void {
+        console.error.apply(this, [message, ...optionalParams]);
         fluentLogger.emit('fatal', { message, ...optionalParams });
     }
 
