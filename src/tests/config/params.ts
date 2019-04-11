@@ -42,8 +42,8 @@ params.add_param(new ServiceParam("position_cmds_topic", PARAM_TYPES.STRING,
 // 	"mongo db connection string"
 // ));
 
-params.add_feature_flag(new ServiceFeatureFlag("RUN_EXPRESS_APP",
-	true, "start the express application"));
+// params.add_feature_flag(new ServiceFeatureFlag("RUN_EXPRESS_APP",
+// 	true, "start the express application"));
 
 params.add_secret(new ServiceSecret("secret1", null, "db password example"));
 

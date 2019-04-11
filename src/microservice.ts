@@ -59,7 +59,8 @@ export class Microservice extends DiContainer {
 		this._configs.init((err?: Error) => {
 			if (err) return callback(err);
 
-			this._run_express = this._configs.get_feature_flag_value("RUN_EXPRESS_APP");
+			const run_express_flag = this._configs.get_feature_flag_value("RUN_EXPRESS_APP");
+			this._run_express = run_express_flag == undefined ? true : run_express_flag == undefined;
 
 			Async.waterfall([
 				(done:Async.AsyncResultCallback<any>) => {
@@ -103,8 +104,8 @@ export class Microservice extends DiContainer {
 			this._logger.info("Microservice - listening on: %s %s:%n", addr.family, addr.address, addr.port);
 			this._logger.info("Microservice - PID: %d", process.pid);
 
-			// hook health check
-			this._express_app.get('/', this._health_check_handler.bind(this));
+			// hook health check - implement a proper health check with a factory
+			// this._express_app.get('/', this._health_check_handler.bind(this));
 
 			// debug
 			this._express_app.use("*", (req: express.Request, res: express.Response, next: express.NextFunction)=>{
@@ -193,10 +194,6 @@ export class Microservice extends DiContainer {
 
 	}
 
-	private _health_check_handler(req: express.Request, res: express.Response, next: express.NextFunction) {
-		// TODO add overrideable custom handler
-		res.send("ok");
-	}
 }
 
 

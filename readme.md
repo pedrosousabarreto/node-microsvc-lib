@@ -14,8 +14,10 @@ npm install node-microsvc-lib --save
 ## Usage
 
 Creating a microservice app:
+
+*app.ts*
  ```javascript
-// app.ts
+"use strict";
 
 import {Microservice, ConsoleLogger} from "node-microsvc-lib";
 
@@ -54,23 +56,23 @@ app.init((err?: Error) => {
 ## How configuration works
 
 The *Microservice* instance expects a *ServiceConfigs* instance. 
-This *ServiceConfigs* instance requires an instance of *ServiceParams*, an (optional) instance of *IConfigsProvider* and an instance of *AppBaseConfigs* 
+This *ServiceConfigs* instance requires the base dir `__dirname`, an instance of *AppBaseConfigs* and an (optional) instance of *IConfigsProvider*. 
 
 Three sets of configuration values exist: 
 - Parameters - that can be of type STRING, BOOL, INT_NUMBER or FLOAT_NUMBER;
 - Feature Flags - always of boolean type;
 - Secrets - always of string type.
 
-### ServiceConfigs *(Required)*
+##### ServiceConfigs *(Required for Microservice obj instantiation)*
 This is the object that the *Microservice* requires to source all its runtime configs.
 
-### ServiceParams *(Required)*
-The definition of params, feature flags and secrets required by the service and their default values.
-
-### IConfigsProvider *(Optional)*
+##### AppBaseConfigs *(Required)*
 Optional instance that fetches all config values from an external service such as consul or hashicorp vault. 
 
-### Load order / precedence
+##### IConfigsProvider *(Optional)*
+Optional instance that fetches all config values from an external service such as consul or hashicorp vault. 
+
+#### Load order / precedence
 The order of loading:
 1. **params.js file** - ServiceParams instance gets loaded along with the default values;
 2. **params.ENV_NAME.js file** - the one that overrides values in ServiceParams per env;
@@ -79,17 +81,17 @@ The order of loading:
 
 In summary, env vars always win (if defined).
 
-### Example
-See [the ref implementaion](https://github.com/pedrosousabarreto/node-microsvc-lib/tree/master/src/tests/config]) for an example
+### Example of config code structure
+See [the ref implementaion](https://github.com/pedrosousabarreto/node-microsvc-lib/tree/master/src/tests/config])
 
-*config.ts*
+*config/config.ts*
 ```javascript
 "use strict";
 
 import {ServiceConfigs, AppBaseConfigs} from "node-microsvc-lib";
 
 let app_base_confs = new AppBaseConfigs();
-app_base_confs.env = process.env.NODE_ENV || 'dev_local';
+app_base_confs.env = process.env.APP_ENV || 'dev_local';
 app_base_confs.solution_name = "my_solution";
 app_base_confs.app_name = "my_app";
 app_base_confs.app_version = "0.0.1";
@@ -98,7 +100,7 @@ app_base_confs.app_api_version = "1";
 
 export = new ServiceConfigs(__dirname, app_base_confs, null);
 ```
-*params.ts*
+*config/params.ts*
 ```javascript
 "use strict";
 
@@ -117,7 +119,7 @@ params.add_secret(new ServiceSecret("secret1", null, "db password example"));
 export = params;
 ```
 
-*params.NODE_ENV.ts (optional file see step 2 above)*
+*config/params.APP_ENV.ts (optional file see step 2 above)*
 ```javascript
 "use strict";
 

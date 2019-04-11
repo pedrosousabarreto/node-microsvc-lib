@@ -157,8 +157,8 @@ export class ServiceConfigs {
 		return this._service_params_values.get(name) || null;
 	}
 
-	get_feature_flag_value(name: string): boolean {
-		return this._service_feature_flags_values.get(name) || false;
+	get_feature_flag_value(name: string): boolean | undefined {
+		return this._service_feature_flags_values.get(name);
 	}
 
 

@@ -17,7 +17,7 @@ import {HealthCheck} from "./factories/health_check";
 
 
 process.env["TEST_PARAM"]= "env_var_value";
-process.env["NODE_ENV"]= "stage";
+process.env["APP_ENV"]= "stage";
 
 describe('main', () => {
 	let app:Microservice;
