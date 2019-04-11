@@ -60,7 +60,7 @@ export class Microservice extends DiContainer {
 			if (err) return callback(err);
 
 			const run_express_flag = this._configs.get_feature_flag_value("RUN_EXPRESS_APP");
-			this._run_express = run_express_flag == undefined ? true : run_express_flag == undefined;
+			this._run_express = run_express_flag == undefined ? true : run_express_flag;
 
 			Async.waterfall([
 				(done:Async.AsyncResultCallback<any>) => {
