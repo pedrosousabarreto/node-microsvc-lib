@@ -244,7 +244,7 @@ export class ServiceConfigs {
 			const val_str = this._configs_provider.get_value(secret.name);
 
 			if (val_str)
-				this._service_params_values.set(secret.name, this._convert_from_string(val_str, PARAM_TYPES.STRING));
+				this._service_secret_values.set(secret.name, this._convert_from_string(val_str, PARAM_TYPES.STRING));
 		});
 	}
 

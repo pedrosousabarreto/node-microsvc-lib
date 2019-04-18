@@ -165,5 +165,20 @@ describe('main', () => {
 
 	});
 
+
+	describe("configs", ()=>{
+		it("override from param file with env name", ()=>{
+			const param_val = configs.get_param_value("kafka_conn_string");
+			expect(param_val).be.equal("stage:9092");
+
+		});
+
+		it("override from env_vars", ()=>{
+			const param_val = configs.get_param_value("test_param");
+			expect(param_val).be.equal("env_var_value");
+
+		});
+	});
+
 });
 
