@@ -154,7 +154,7 @@ export class ServiceConfigs {
 	}
 
 	get_param_value(name: string): any {
-		return this._service_params_values.get(name) || null;
+		return this._service_params_values.get(name) !== undefined ? this._service_params_values.get(name):  null
 	}
 
 	get_feature_flag_value(name: string): boolean | undefined {
@@ -163,7 +163,7 @@ export class ServiceConfigs {
 
 
 	get_secret_value(name: string): string {
-		return this._service_secret_values.get(name) || null;
+		return this._service_secret_values.get(name) !== undefined ? this._service_secret_values.get(name):  null
 	}
 
 	// for now use: https://hub.docker.com/_/vault as the ref implementation
