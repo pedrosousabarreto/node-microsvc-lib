@@ -1,6 +1,8 @@
 /**
  * Created by pedrosousabarreto@gmail.com on 15/Jan/2019.
  */
+
+
 "use strict";
 
 import * as http from "http";
@@ -15,7 +17,8 @@ import {DiContainer} from "./di_container";
 import {ServiceConfigs} from "./service_configs";
 import {IDiFactory, ILogger} from "./interfaces";
 import {AddressInfo} from "net";
-
+import Signals = NodeJS.Signals;
+import SignalsListener = NodeJS.SignalsListener;
 
 export class Microservice extends DiContainer {
 	private _express_app!: express.Application;
@@ -42,18 +45,23 @@ export class Microservice extends DiContainer {
 		// _init_express_app
 		// _init_factories
 
+		const handleDestroyEvents = (signal: Signals): void => {
+			this._logger.info(`Microservice - ${signal} received - cleaning up...`);
+			this.destroy((err: Error | undefined) => {
+				process.exit();
+			});
+		};
+
 		//do something when app is closing
 		process.on('exit', () => {
 			this._logger.info("Microservice - exiting...");
 		});
 
 		//catches ctrl+c event
-		process.on('SIGINT', ()=> {
-			this._logger.info("Microservice - SIGINT received - cleaning up...");
-			this.destroy((err:Error|undefined)=>{
-				process.exit();
-			});
-		});
+		process.on('SIGINT', handleDestroyEvents);
+
+		//catches program termination event
+		process.on('SIGTERM', handleDestroyEvents);
 
 		// init configs first
 		this._configs.init((err?: Error) => {
@@ -165,9 +173,9 @@ export class Microservice extends DiContainer {
 			},
 			(err?: any) => {
 				if (err)
-					this._logger.error(err, "Microservice - SIGINT cleanup error");
+					this._logger.error(err, "Microservice - SIGINT/SIGTERM cleanup error");
 				else
-					this._logger.info("Microservice - SIGINT cleanup completed successfully, exiting...");
+					this._logger.info("Microservice - SIGINT/SIGTERM cleanup completed successfully, exiting...");
 				callback(err);
 			}
 		);
