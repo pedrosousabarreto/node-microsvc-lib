@@ -251,7 +251,11 @@ export class ServiceConfigs {
 			require(filename)(this);
 			console.info(`${CLASS_NAME} - env var overrides file loaded successfully from path: ${filename}`);
 		} catch(e){
-			console.warn(`${CLASS_NAME} - env var overrides file NOT FOUND in path: ${filename}`);
+			if(e.code === "MODULE_NOT_FOUND")
+				console.warn(`${CLASS_NAME} - env var overrides file NOT FOUND in path: ${filename}`);
+			else{
+				console.error(e, `${CLASS_NAME} - error in env var overrides file in path: ${filename}`);
+			}
 		}
 	}
 
