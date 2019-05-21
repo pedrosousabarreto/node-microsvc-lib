@@ -3,6 +3,21 @@
  */
 "use strict";
 
+export enum LogLevels {
+	TRACE,
+	DEBUG,
+	INFO,
+	WARN,
+	ERROR,
+	FATAL,
+}
+
+export type MessageType = {
+	correlation_id?: string;
+	log_level: LogLevels;
+	message: string;
+}
+
 export interface ILogger {
 	debug(message?: any, ...optionalParams: any[]): void;
 	info(message?: any, ...optionalParams: any[]): void;
