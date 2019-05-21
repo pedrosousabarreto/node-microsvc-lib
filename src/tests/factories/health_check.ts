@@ -5,8 +5,7 @@
 import * as express from "express";
 
 
-import {ILogger,IDiFactory } from "../../interfaces"
-import {ServiceConfigs} from "../../service_configs"
+import {ILogger,IDiFactory, ServiceConfigs } from "../../index"
 
 const my_path = "/_health_check";
 
