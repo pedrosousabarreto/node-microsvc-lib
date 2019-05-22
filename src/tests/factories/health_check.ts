@@ -6,6 +6,7 @@ import * as express from "express";
 
 
 import {ILogger,IDiFactory, ServiceConfigs } from "../../index"
+import {ConsoleLogger} from "../../console_logger";
 
 const my_path = "/_health_check";
 
@@ -23,7 +24,11 @@ export class HealthCheck implements IDiFactory {
 	constructor(configs: ServiceConfigs, express_app: express.Application, logger:ILogger) {
 		this._configs = configs;
 		this._express_app = express_app;
-		this._logger = logger;
+
+		if(!logger)
+			this._logger = new ConsoleLogger().create_child({class: "HealthCheck"});
+		else
+			this._logger = logger.create_child({class: "HealthCheck"});
 	}
 
 	init(callback: (err?: Error) => void) {

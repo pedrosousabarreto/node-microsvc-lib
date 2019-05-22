@@ -18,6 +18,7 @@ import {ServiceConfigs} from "./service_configs";
 import {IDiFactory, ILogger} from "./interfaces";
 import {AddressInfo} from "net";
 import Signals = NodeJS.Signals;
+import {ConsoleLogger} from "./console_logger";
 
 export class Microservice extends DiContainer {
 	private _express_app!: express.Application;
@@ -31,7 +32,10 @@ export class Microservice extends DiContainer {
 	constructor(configs: ServiceConfigs, logger?:ILogger) {
 		super(logger);
 
-		this._logger = (<any>logger).create_child({ class: "Microservice" });
+		if(!logger)
+			this._logger = new ConsoleLogger().create_child({class: "Microservice"});
+		else
+			this._logger = logger.create_child({class: "Microservice"});
 
 		console.time("MicroService - Start " + configs.instance_name);
 

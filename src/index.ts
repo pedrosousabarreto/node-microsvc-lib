@@ -6,6 +6,7 @@ import {HashicorpVaultProvider as imp_HashicorpVaultProvider} from "./config_pro
 import {AWSSecretsManagerProvider as imp_AWSSecretsManagerProvider} from "./config_providers/aws_secrets_manager";
 import * as Interfaces from "./interfaces";
 import {ConsoleLogger as imp_ConsoleLogger} from "./console_logger";
+import {BunyanLogger as imp_BunyanLogger} from "./bunyan_logger";
 import {DiContainer as imp_DiContainer} from "./di_container";
 import {Microservice as imp_Microservice} from "./microservice";
 
@@ -21,6 +22,9 @@ import * as imp_ObjectUtils from "./objects_utils";
 
 	export type ConsoleLogger = imp_ConsoleLogger;
 	export const ConsoleLogger = imp_ConsoleLogger;
+
+	export type BunyanLogger = imp_BunyanLogger;
+	export const BunyanLogger = imp_BunyanLogger;
 
 	export type DiContainer = imp_DiContainer;
 	export const DiContainer = imp_DiContainer;
