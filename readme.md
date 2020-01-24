@@ -2,7 +2,7 @@
 [![Git Commit](https://img.shields.io/github/last-commit/pedrosousabarreto/node-microsvc-lib.svg?style=flat)](https://github.com/pedrosousabarreto/node-microsvc-lib/commits/master)
 [![Npm Version](https://img.shields.io/npm/v/node-microsvc-lib.svg?style=flat)](https://www.npmjs.com/package/node-microsvc-lib)
 [![NPM Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/node-microsvc-lib.svg?style=flat)](https://www.npmjs.com/package/node-microsvc-lib)
-
+[![CircleCI](https://circleci.com/gh/pedrosousabarreto/node-microsvc-lib.svg?style=svg)](https://circleci.com/gh/pedrosousabarreto/node-microsvc-lib)
 
 
 ## Installation
