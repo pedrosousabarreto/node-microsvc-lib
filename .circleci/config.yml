@@ -2,6 +2,7 @@
 #
 # Check {{ '/2.0/language-javascript/' | docs_url }} for more details
 #
+
 version: 2.1
 orbs:
   snyk: snyk/snyk@0.0.8
