@@ -67,5 +67,5 @@ workflows:
       - test
   scan_app:
     jobs:
-      - snyk_app_scan
+      - snyk_app_scan:
         context: shared
