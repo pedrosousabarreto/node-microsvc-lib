@@ -46,7 +46,7 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
 
-      - run: npm install 
+      - run: npm install
       - run:
           name: Run snyk app scan
           command: snyk/scan
@@ -68,4 +68,5 @@ workflows:
   scan_app:
     jobs:
       - snyk_app_scan:
-        context: shared
+          context: shared
+
