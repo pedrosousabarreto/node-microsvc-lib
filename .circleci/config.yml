@@ -2,7 +2,10 @@
 #
 # Check {{ '/2.0/language-javascript/' | docs_url }} for more details
 #
-version: 2
+
+version: 2.1
+orbs:
+  snyk: snyk/snyk@0.0.8
 
 defaults: &defaults
   working_directory: ~/repo
@@ -34,8 +37,37 @@ jobs:
           root: ~/repo
           paths: .
 
+  snyk_app_scan:
+    <<: *defaults
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run: npm install
+      - run:
+          name: Run snyk app scan
+          command: snyk/scan
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+
 workflows:
   version: 2
   tests:
     jobs:
       - test
+  scan_app:
+    jobs:
+      - snyk_app_scan:
+          context: shared
+
