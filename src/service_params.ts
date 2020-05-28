@@ -3,16 +3,23 @@
  */
 "use strict";
 
-import {strEnum} from "./string_utils";
-export const PARAM_TYPES = strEnum([
-	'STRING',
-	'BOOL',
-	'INT_NUMBER',
-	'FLOAT_NUMBER'
-]);
+// import {strEnum} from "./string_utils";
+// export const PARAM_TYPES = strEnum([
+// 	'STRING',
+// 	'BOOL',
+// 	'INT_NUMBER',
+// 	'FLOAT_NUMBER'
+// ]);
+
+export enum ParamTypes {
+	"STRING"= "STRING",
+	"BOOL" = "BOOL",
+	"INT_NUMBER" = "INT_NUMBER",
+	"FLOAT_NUMBER" = "FLOAT_NUMBER"
+}
 
 /** type from string enum */
-export type ParamType = keyof typeof PARAM_TYPES;
+// export type ParamType = keyof typeof PARAM_TYPES;
 
 /***
  * ServiceParams
@@ -55,7 +62,8 @@ export class ServiceParams{
 
 	// params
 
-	add_param(name:string, type:ParamType, default_value:any, description:string){
+	// add_param(name:string, type:ParamType, default_value:any, description:string){
+	add_param(name:string, type:ParamTypes, default_value:any, description:string){
 		const param = new ServiceParam(name, type, default_value, description);
 		this._check_name(param.name);
 
@@ -128,10 +136,12 @@ export class ServiceParams{
 }
 
 export class ServiceParam{
-	constructor(private _name:string, private _type:ParamType, private _default_value:any, private _description:string){}
+	// constructor(private _name:string, private _type:ParamType, private _default_value:any, private _description:string){}
+	constructor(private _name:string, private _type:ParamTypes, private _default_value:any, private _description:string){}
 
 	get name():string{ return this._name;}
-	get type():ParamType{ return this._type;}
+	// get type():ParamType{ return this._type;}
+	get type():ParamTypes{ return this._type;}
 	get default_value():any{ return this._default_value;}
 	get description():string{ return this._description;}
 }

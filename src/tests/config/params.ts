@@ -4,30 +4,30 @@
 
 "use strict";
 
-import {PARAM_TYPES, ServiceParams} from "../../index";
+import {ParamTypes, ServiceParams} from "../../index";
 
 let params = new ServiceParams();
 
 params.add_param(
-	"test_param",	 PARAM_TYPES.STRING,
+	"test_param",	 ParamTypes.STRING,
 	"default_val",
 	"test param to be overridden by env_var"
 );
 
 params.add_param(
-	"http_port", PARAM_TYPES.INT_NUMBER,
+	"http_port", ParamTypes.INT_NUMBER,
 	3000,
 	"http port for the service to listen on"
 );
 
 params.add_param(
-	"ext_base_url", PARAM_TYPES.STRING,
+	"ext_base_url", ParamTypes.STRING,
 	"https://localhost",
 	"external base url, ex: https://localhost:443"
 );
 
 params.add_param(
-	"kafka_conn_string", PARAM_TYPES.STRING,
+	"kafka_conn_string", ParamTypes.STRING,
 	"localhost:9092",
 	"kafka broker connection string - ex: 127.0.0.1:9092"
 );

@@ -36,7 +36,7 @@ export class AWSSecretsManagerProvider implements IConfigsProvider {
 		// assert.ok(this._aws_creds.sessionToken); // this is optional
 	}
 
-	init(keys: string[], callback: (err?: Error) => void): void {
+	async init(keys: string[]): Promise<void> {
 		if(this._aws_role_name){
 			// assume role
 			const sts = new AWS.STS({});
@@ -46,7 +46,7 @@ export class AWSSecretsManagerProvider implements IConfigsProvider {
 			};
 			sts.assumeRole(role_params, (err, data) => {
 				if (err)
-					return callback(err);
+					return Promise.reject(err);
 
 				if(!data)
 					return new Error(`AWSSecretsManagerProvider - Could not assume role and get credentials from it`);
@@ -55,12 +55,12 @@ export class AWSSecretsManagerProvider implements IConfigsProvider {
 				// @ts-ignore
 				this._aws_runtime_credentials = new AWS.Credentials(data.Credentials.AccessKeyId, data.Credentials.SecretAccessKey, data.Credentials.SessionToken);
 
-				this._fetch_all_from_aws_secrets_manager(keys, callback)
+				return this._fetch_all_from_aws_secrets_manager(keys)
 			});
 		}else{
 			// fetch all
 			this._aws_runtime_credentials = new AWS.Credentials(this._aws_creds.accessKeyId, this._aws_creds.secretAccessKey, this._aws_creds.sessionToken);
-			this._fetch_all_from_aws_secrets_manager(keys, callback);
+			return this._fetch_all_from_aws_secrets_manager(keys);
 		}
 	}
 
@@ -68,32 +68,33 @@ export class AWSSecretsManagerProvider implements IConfigsProvider {
 		return this._kvs.get(key_name) || null;
 	}
 
-	private _fetch_all_from_aws_secrets_manager(keys: string[], callback: (err?: Error) => void) {
-		const secrets_manager = new AWS.SecretsManager({region: this._region, credentials: this._aws_runtime_credentials});
+	private async _fetch_all_from_aws_secrets_manager(keys: string[]):Promise<void> {
+		return new Promise((resolve, reject)=>{
+			const secrets_manager = new AWS.SecretsManager({region: this._region, credentials: this._aws_runtime_credentials});
 
-		secrets_manager.getSecretValue(
-			{SecretId: this._secret_name},
-			(err: AWSError, secret_data: SecretsManager.Types.GetSecretValueResponse) => {
-				if (err)
-					return callback(err);
+			secrets_manager.getSecretValue(
+				{SecretId: this._secret_name},
+				(err: AWSError, secret_data: SecretsManager.Types.GetSecretValueResponse) => {
+					if (err)
+						return reject(err);
 
-				try {
-					// successful response
-					const secrets = JSON.parse(String(secret_data.SecretString));
+					try {
+						// successful response
+						const secrets = JSON.parse(String(secret_data.SecretString));
 
-					keys.forEach((key: string) => {
-						if (key in secrets) {
-							this._kvs.set(key, secrets[key]);
-						}
-					});
-					callback();
-				} catch (e) {
-					callback(e);
+						keys.forEach((key: string) => {
+							if (key in secrets) {
+								this._kvs.set(key, secrets[key]);
+							}
+						});
+						return resolve();
+					} catch (e) {
+						return reject(e);
+					}
+
 				}
-
-			}
-		);
-
+			);
+		});
 	}
 }
 

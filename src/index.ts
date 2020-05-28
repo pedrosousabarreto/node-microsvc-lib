@@ -51,9 +51,10 @@ import * as imp_ObjectUtils from "./objects_utils";
 	export type ServiceSecret = imp_ServiceParams.ServiceSecret;
 	export const ServiceSecret = imp_ServiceParams.ServiceSecret;
 
-	export type ParamType = imp_ServiceParams.ParamType;
+	// export type ParamType = imp_ServiceParams.ParamType;
 
-	export const PARAM_TYPES = imp_ServiceParams.PARAM_TYPES;
+	// export const PARAM_TYPES = imp_ServiceParams.PARAM_TYPES;
+	export const ParamTypes = imp_ServiceParams.ParamTypes;
 
 	export const HashicorpVaultProvider = imp_HashicorpVaultProvider;
 	export const AWSSecretsManagerProvider = imp_AWSSecretsManagerProvider;
