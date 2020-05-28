@@ -24,7 +24,7 @@ export class MockConfigsProvider implements IConfigsProvider {
 		this._mock_values = mock_values;
 	}
 
-	init(keys: string[], callback: (err?: Error) => void): void {
+	async init(keys: string[]): Promise<void> {
 		keys.forEach((key: string) => {
 			if (this._mock_values.hasOwnProperty(key)) {
 				// @ts-ignore
@@ -32,7 +32,7 @@ export class MockConfigsProvider implements IConfigsProvider {
 			}
 		});
 
-		callback();
+		return;
 	}
 
 	get_value(key_name: string): string | null {

@@ -1,20 +1,12 @@
 /**
  * Created by pedrosousabarreto@gmail.com on 15/Jan/2019.
  */
-
-
 "use strict";
 
-/*
-* to be passed to a server constructor
-* - needs to be fed a IConfigsProvider and a ServiceParams
-* */
 import * as uuid from "uuid";
-import {PARAM_TYPES, ParamType, ServiceFeatureFlag, ServiceParam, ServiceParams, ServiceSecret} from "./service_params";
+import {ParamTypes, ServiceFeatureFlag, ServiceParam, ServiceParams, ServiceSecret} from "./service_params";
 import {IConfigsProvider} from "./interfaces";
 import * as path from "path";
-import InstanceOf = Chai.InstanceOf;
-import {throws} from "assert";
 
 const CLASS_NAME="ServiceConfigs";
 
@@ -135,13 +127,13 @@ export class ServiceConfigs {
 	}
 
 	// get everything it needs and prepare the object to be used
-	init(callback: (err?: Error) => void) {
+	async init():Promise<void> {
 		// create an internal structure with values of params and feature_flags
 		// so get_param_value  and get_feature_flag_value can work
 
 		if (this._configs_provider == null){
 			this._override_from_envvars();
-			return callback();
+			return Promise.resolve();
 		}
 
 		// const keys: string[] = Array.from(this._service_params_values.keys()).concat(
@@ -152,17 +144,13 @@ export class ServiceConfigs {
 		const keys = this._service_params.all_keys();
 
 		// go to consul or whatever configuration service
-		this._configs_provider.init(keys, (err?: Error) => {
-			if(err){
-				console.error(err);
-				return callback(err);
-				// throw new Error("Error initialising ConfigProvider");
-			}
-
+		await this._configs_provider.init(keys).catch((err?: Error) => {
+			console.error(err);
+			return Promise.reject(err);
+		}).then(()=>{
 			this._override_from_serviceprovider();
-
 			this._override_from_envvars();
-			callback(err);
+			Promise.resolve();
 		});
 	}
 
@@ -267,7 +255,7 @@ export class ServiceConfigs {
 
 		this._service_params.get_all_feature_flags().forEach((feature_flag: ServiceFeatureFlag) => {
 			if (process.env.hasOwnProperty(feature_flag.name.toUpperCase()))
-				this._service_feature_flags_values.set(feature_flag.name, this._convert_from_string(process.env[feature_flag.name.toUpperCase()] || "", PARAM_TYPES.BOOL));
+				this._service_feature_flags_values.set(feature_flag.name, this._convert_from_string(process.env[feature_flag.name.toUpperCase()] || "", ParamTypes.BOOL));
 			// this._service_feature_flags_values.set(feature_flag.name,  (process.env[feature_flag.name] === "true" || process.env[feature_flag.name] === "1"));
 		});
 
@@ -293,7 +281,7 @@ export class ServiceConfigs {
 			const val_str = this._configs_provider.get_value(feature_flag.name);
 
 			if (val_str)
-				this._service_feature_flags_values.set(feature_flag.name, this._convert_from_string(val_str, PARAM_TYPES.BOOL));
+				this._service_feature_flags_values.set(feature_flag.name, this._convert_from_string(val_str, ParamTypes.BOOL));
 		});
 
 		this._service_params.get_all_secrets().forEach((secret: ServiceSecret) => {
@@ -301,16 +289,16 @@ export class ServiceConfigs {
 			const val_str = this._configs_provider.get_value(secret.name);
 
 			if (val_str)
-				this._service_secret_values.set(secret.name, this._convert_from_string(val_str, PARAM_TYPES.STRING));
+				this._service_secret_values.set(secret.name, this._convert_from_string(val_str, ParamTypes.STRING));
 		});
 	}
 
-	private _convert_from_string(value: string, destination_type: ParamType): any {
+	private _convert_from_string(value: string, destination_type: ParamTypes): any {
 		switch (destination_type) {
-			case PARAM_TYPES.STRING:
+			case ParamTypes.STRING:
 				return value;
 				break;
-			case PARAM_TYPES.INT_NUMBER:
+			case ParamTypes.INT_NUMBER:
 				try {
 					const num = Number.parseInt(value);
 					return num;
@@ -319,7 +307,7 @@ export class ServiceConfigs {
 				}
 				return value;
 				break;
-			case PARAM_TYPES.FLOAT_NUMBER:
+			case ParamTypes.FLOAT_NUMBER:
 				try {
 					const num = Number.parseFloat(value)
 					return num;
@@ -328,7 +316,7 @@ export class ServiceConfigs {
 				}
 				return value;
 				break;
-			case PARAM_TYPES.BOOL:
+			case ParamTypes.BOOL:
 				try {
 					const bool_value = value.toLowerCase() == "true" || value == "1" ? true : false
 					return bool_value;
