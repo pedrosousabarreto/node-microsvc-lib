@@ -57,7 +57,7 @@ export class JSONLogger implements ILogger {
 		]);
 	}
 
-	create_message(level: string, message?: any, ...optionalParams: any[]): {} {
+	create_message(level: string, message: any = '', optionalParams: any[] = []): {} {
 		let logMessage = {
 			log_level: level,
 		};
@@ -65,7 +65,7 @@ export class JSONLogger implements ILogger {
 		if (typeof message === "object") {
 			Object.assign(logMessage, message);
 		} else if (typeof message === "string") {
-			Object.assign(logMessage, {message: printf(message, optionalParams)});
+			Object.assign(logMessage, {message: printf(message, ...optionalParams)} );
 		} else {
 			Object.assign(logMessage, {message});
 		}
