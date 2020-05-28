@@ -107,12 +107,12 @@ export = new ServiceConfigs(__dirname, app_base_confs, null);
 ```javascript
 "use strict";
 
-import {PARAM_TYPES, ServiceParams} from "node-microsvc-lib";
+import {ParamTypes, ServiceParams} from "node-microsvc-lib";
 let params = new ServiceParams();
 
 params.add_param(
 	"test_param",
-	PARAM_TYPES.STRING, 
+	ParamTypes.STRING, 
 	"default_val",
 	"test param to be overridden by env_var"
 );
@@ -149,10 +149,10 @@ module.exports = function(configs:ServiceConfigs){
 ## Pre-requisites for contributing
 NVM - Node Version Manager - https://github.com/creationix/nvm
  ```bash
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 ```
 
-After NVM is installed, execute this to download and install the correct node version:
+After NVM is installed, go to the proect directory and execute this to download and install the correct node version:
 ```bash
-nvm install 10.15.0
+nvm install -s
 ```
