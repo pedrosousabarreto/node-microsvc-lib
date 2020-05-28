@@ -44,12 +44,11 @@ process.on("uncaughtException", (err:Error)=>{
    logger.fatal(err);
 });
 
-app.init((err?: Error) => {
-   if (err)
-      return logger.error(err);
-
-   logger.info("APP STARTED");
- });
+app.init().catch((err) => {
+    return logger.error(err);
+}).then(()=> {
+    logger.info("APP STARTED");
+});
 
 ```
 
